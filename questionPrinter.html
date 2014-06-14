@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Quiz Board Question Maker</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,900,300' rel='stylesheet' type='text/css'>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+    <!-- Style for question inputing -->
+    <style>
+
+      *, *:before, *:after {
+        -moz-box-sizing: border-box; 
+        -webkit-box-sizing: border-box; 
+        box-sizing: border-box;
+      }
+
+      html, body {
+        padding: 0;
+        margin: 0;
+        font-family: Roboto!important;
+      }
+
+      div.question-input-container {
+        margin: 5em;
+      }
+
+      div.question-input-container form {
+        width: 75%;
+        min-width: 700px;
+        max-width: 1300px;
+        border: 1px solid #777;
+        margin: 0 auto;
+        padding: 1em;
+      }
+
+      div.question-input-container header {
+        margin: 0 auto;
+        width: 630px;
+        display: block;
+      }
+
+      div.question-input-container input {
+        text-align: center;
+      }
+
+      div.question-input-container input, div.question-input-container textarea {
+        font-size: 2em;
+        margin: .25em;
+        padding: .5em;
+      }
+
+      div.question-input-container span {
+        font-size: 2em;
+        margin: .25em;
+      }
+
+      div.question-input-container input.category {
+        width: 10em;
+      }
+
+      div.question-input-container input[type="number"] {
+        width: 2.5em;
+      }
+
+      div.question-input-container textarea {
+        width: calc(100% - .5em);
+        font-size: 2em;
+        font-family: sans-serif;
+        font-weight: bold;
+        text-align: center;
+        resize: none;
+      }
+
+      div.question-input-container input[type="radio"] {
+        height: 1em;
+        width: 1em;
+        position: relative;
+        top: 7px;
+      }
+
+      div.question-input-container input.answer {
+        width: calc(100% - 3.5em);
+        text-align: left;
+      }
+
+      div.question-input-container button.print {
+        display: block;
+        font-size: 2em;
+        padding: .5em;
+        width: 10em;
+        margin: 1em auto 0 auto;
+      }
+    </style>
+
+    <!-- Style for card printing -->
+    <style>
+      @media screen, print {
+
+        div.question-print-container {
+          display: none;
+        }
+
+        div.card {
+          border: 3px solid #000;
+          width: 14.4cm;
+          height: 14.4cm;
+          padding: 5px;
+          margin: 0 auto;
+          position: relative;
+        }
+
+        div.card h1, div.card h2 {
+          margin: 0;
+          padding: 0;
+          text-align: center;
+        }
+
+        div.card h1 {
+          margin-bottom: 10px;
+          color: #888;
+          font-weight: 900;
+          font-size: 26px;
+        }
+
+        div.card h2 {
+          font-weight: 800;
+          font-size: 21px;
+          margin-bottom: 20px;
+        }
+
+        div.card div.holes {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 4.8cm;
+          background-color: #888;
+          border-top: 3px solid #000;
+        }
+
+        div.card ul {
+          padding-left: 3em;
+          margin: 0;
+          font-weight: 400;
+          list-style-type: upper-alpha;
+        }
+
+        div.card ul li {
+          font-size: 18px;
+          margin: 0 0 5px 0;
+        }
+
+        div.card div.holes div.hole1 {
+          position: absolute;
+          left: 62px;
+          bottom: 52px;
+        }
+
+        div.card div.holes div.hole2 {
+          position: absolute;
+          left: 154px;
+          bottom: 52px;
+        }
+
+        div.card div.holes div.hole4 {
+          position: absolute;
+          left: 254px;
+          bottom: 52px;
+        }
+
+        div.card div.holes div.hole5 {
+          position: absolute;
+          left: 355px;
+          bottom: 52px;
+        }
+
+        div.card div.holes div.hole3 {
+          position: absolute;
+          left: 455px;
+          bottom: 52px;
+        }
+      }
+    </style>
+
+    <!-- Script for autoheight textarea -->
+    <script>
+
+      // TEXTAREA AUTO RESIZE
+      (function(e){var t,o={className:"autosizejs",id:"autosizejs",append:"\n",callback:!1,resizeDelay:10,placeholder:!0},i='<textarea tabindex="-1" style="position:absolute; top:-999px; left:0; right:auto; bottom:auto; border:0; padding: 0; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box; word-wrap:break-word; height:0 !important; min-height:0 !important; overflow:hidden; transition:none; -webkit-transition:none; -moz-transition:none;"/>',n=["fontFamily","fontSize","fontWeight","fontStyle","letterSpacing","textTransform","wordSpacing","textIndent"],s=e(i).data("autosize",!0)[0];s.style.lineHeight="99px","99px"===e(s).css("lineHeight")&&n.push("lineHeight"),s.style.lineHeight="",e.fn.autosize=function(i){return this.length?(i=e.extend({},o,i||{}),s.parentNode!==document.body&&e(document.body).append(s),this.each(function(){function o(){var t,o=window.getComputedStyle?window.getComputedStyle(u,null):!1;o?(t=u.getBoundingClientRect().width,(0===t||"number"!=typeof t)&&(t=parseInt(o.width,10)),e.each(["paddingLeft","paddingRight","borderLeftWidth","borderRightWidth"],function(e,i){t-=parseInt(o[i],10)})):t=p.width(),s.style.width=Math.max(t,0)+"px"}function a(){var a={};if(t=u,s.className=i.className,s.id=i.id,d=parseInt(p.css("maxHeight"),10),e.each(n,function(e,t){a[t]=p.css(t)}),e(s).css(a).attr("wrap",p.attr("wrap")),o(),window.chrome){var r=u.style.width;u.style.width="0px",u.offsetWidth,u.style.width=r}}function r(){var e,n;t!==u?a():o(),s.value=!u.value&&i.placeholder?(p.attr("placeholder")||"")+i.append:u.value+i.append,s.style.overflowY=u.style.overflowY,n=parseInt(u.style.height,10),s.scrollTop=0,s.scrollTop=9e4,e=s.scrollTop,d&&e>d?(u.style.overflowY="scroll",e=d):(u.style.overflowY="hidden",c>e&&(e=c)),e+=w,n!==e&&(u.style.height=e+"px",f&&i.callback.call(u,u))}function l(){clearTimeout(h),h=setTimeout(function(){var e=p.width();e!==g&&(g=e,r())},parseInt(i.resizeDelay,10))}var d,c,h,u=this,p=e(u),w=0,f=e.isFunction(i.callback),z={height:u.style.height,overflow:u.style.overflow,overflowY:u.style.overflowY,wordWrap:u.style.wordWrap,resize:u.style.resize},g=p.width(),y=p.css("resize");p.data("autosize")||(p.data("autosize",!0),("border-box"===p.css("box-sizing")||"border-box"===p.css("-moz-box-sizing")||"border-box"===p.css("-webkit-box-sizing"))&&(w=p.outerHeight()-p.height()),c=Math.max(parseInt(p.css("minHeight"),10)-w||0,p.height()),p.css({overflow:"hidden",overflowY:"hidden",wordWrap:"break-word"}),"vertical"===y?p.css("resize","none"):"both"===y&&p.css("resize","horizontal"),"onpropertychange"in u?"oninput"in u?p.on("input.autosize keyup.autosize",r):p.on("propertychange.autosize",function(){"value"===event.propertyName&&r()}):p.on("input.autosize",r),i.resizeDelay!==!1&&e(window).on("resize.autosize",l),p.on("autosize.resize",r),p.on("autosize.resizeIncludeStyle",function(){t=null,r()}),p.on("autosize.destroy",function(){t=null,clearTimeout(h),e(window).off("resize",l),p.off("autosize").off(".autosize").css(z).removeData("autosize")}),r())})):this}})(window.jQuery||window.$);
+
+
+      $(function(){
+        $('textarea').autosize();
+      });
+    </script>
+
+    <!-- Script for print button click -->
+    <script>
+      $(document).ready(function() {
+        $('button.print').click(function() {
+          $('div.question-input-container').hide();
+
+          var category = $('header input').val();
+          var number = $('input[type="number"]').val();
+
+          var question = $('textarea').val();
+
+          var answerA = $('input.answer.a').val();
+          var answerB = $('input.answer.b').val();
+          var answerC = $('input.answer.c').val();
+          var answerD = $('input.answer.d').val();
+          var answerE = $('input.answer.e').val();
+
+          var correctAnswer = $('input[type="radio"]').val();
+
+          /*********************************************************/
+
+          $('div.card h1').text(category.trim() + " Question " + number + ":");
+          $('div.card h2').text(question);
+
+          $('div.card ul li.a').text(answerA);
+          $('div.card ul li.b').text(answerB);
+          $('div.card ul li.c').text(answerC);
+          $('div.card ul li.d').text(answerD);
+          $('div.card ul li.e').text(answerE);
+
+          var answer = correctAnswer;
+          var letters = new Array('A', 'B', 'C', 'D', 'E');
+
+          var index = letters.indexOf(answer) + 1;
+          var baseTwo = Number(index).toString(2);
+          baseTwo = baseTwo.split('').reverse().join(''); // reverses string
+
+          for (var i = 0; i < baseTwo.length; i++) {
+            var char = baseTwo.charAt(i);
+            if (char == '1') {
+              $("div.card div.hole" + (i + 1) + " svg circle").attr("fill", "#333");
+            }
+          }
+
+          if (Math.random() < 0.5) { $("div.card div.hole4 svg circle").attr("fill", "#333"); }
+          if (Math.random() < 0.5) { $("div.card div.hole5 svg circle").attr("fill", "#333"); }
+
+          $('div.question-print-container').show();
+
+        });
+      });
+    </script>
+
+  </head>
+
+  <body>
+
+    <div class="question-input-container">
+      <form>
+        <header>
+          <input class="category" type="text" placeholder="Free Fall"/><span> Question </span><input type="number" placeholder="1" /><span>:</span>
+        </header>
+
+        <textarea class="question" placeholder="If you travel to the moon and drop a 10 pound bowling ball and a 30 pound dumbbell from the same height, the bowling ball will..."></textarea>
+
+        <input name="correct" type="radio" value="A" checked /><span>A.</span><input class="answer a" placeholder="hit the ground before the dumbbell"/><br/>
+        <input name="correct" type="radio" value="B" /><span>B.</span><input class="answer b" placeholder="hit the ground after the dumbbell"/><br/>
+        <input name="correct" type="radio" value="C" /><span>C.</span><input class="answer c" placeholder="hit the ground at the same time as the dumbbell"/><br/>
+        <input name="correct" type="radio" value="D" /><span>D.</span><input class="answer d" placeholder="not hit the ground"/><br/>
+        <input name="correct" type="radio" value="E" /><span>E.</span><input class="answer e" placeholder="none of the above"/><br/>
+
+      </form>
+
+      <button class="print">Print Question Card</button>
+    </div>
+
+    <div class="question-print-container">
+      <div class="card">
+        <h1></h1>
+
+        <h2></h2>
+
+        <ul>
+          <li class="a"></li>
+          <li class="b"></li>
+          <li class="c"></li>
+          <li class="d"></li>
+          <li class="e"></li>
+        </ul>
+
+        <div class="holes">
+          <div class="hole1"><svg height="25" width="25"><circle cx="12" cy="12" r="11" stroke="black" stroke-width="1" fill="#888"></circle></svg></div>
+          <div class="hole2"><svg height="25" width="25"><circle cx="12" cy="12" r="11" stroke="black" stroke-width="1" fill="#888"></circle></svg></div>
+          <div class="hole4"><svg height="25" width="25"><circle cx="12" cy="12" r="11" stroke="black" stroke-width="1" fill="#888"></circle></svg></div>
+          <div class="hole5"><svg height="25" width="25"><circle cx="12" cy="12" r="11" stroke="black" stroke-width="1" fill="#888"></circle></svg></div>
+          <div class="hole3"><svg height="25" width="25"><circle cx="12" cy="12" r="11" stroke="black" stroke-width="1" fill="#888"></circle></svg></div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>
