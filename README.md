@@ -20,7 +20,7 @@ This Quiz Board contains some basic components to interact with the user:
  - 5 push buttons
  - Slot for question cards
 
-Under the hood though, the Quiz Board contains an Arduino micro-controller. This is like a computer, and it serves as the brains of the operation. Every question card has holds in the bottom of it that are feed into the slot. Once in the slot, the Arduino reads the answer (encoded in the holes) and waits for the user to press a button. Each button corresponds to an answer on the card. If a correct answer is selected, the green LEDs light up and a happy sound is played. For wrong answers, the red LEDs are illuminated and a sad sound is played. Basic operation is very simple and allows for a **infinite** number of questions (on seperate cards).
+Under the hood though, the Quiz Board contains an Arduino micro-controller. This is like a computer, and it serves as the brains of the operation. Every question card has holes in the bottom of it that are fed into the slot. Once in the slot, the Arduino reads the answer (encoded in the holes) and waits for the user to press a button. Each button corresponds to an answer on the card. If a correct answer is selected, the green LEDs light up and a happy sound is played. For wrong answers, the red LEDs are illuminated and a sad sound is played. Basic operation is very simple and allows for a **infinite** number of questions (on seperate cards).
 
 ###Easter eggs
 Within the code for the Arudino, there are a couple of [easter eggs](http://goo.gl/bLm1HF) to play with.
